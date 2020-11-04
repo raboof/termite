@@ -1058,6 +1058,19 @@ gboolean key_press_cb(VteTerminal *vte, GdkEventKey *event, keybind_info *info) 
                 if (modify_key_feed(event, info, modify_table))
                     return TRUE;
         }
+    } else if (modifiers == GDK_MOD1_MASK) {
+        switch (gdk_keyval_to_lower(event->keyval)) {
+            case GDK_KEY_f:
+                enter_command_mode(vte, &info->select);
+                find_urls(vte, &info->panel);
+                gtk_widget_show(info->panel.da);
+                overlay_show(&info->panel, overlay_mode::urlselect, nullptr);
+                exit_command_mode(vte, &info->select);
+                return TRUE;
+            default:
+                if (modify_key_feed(event, info, modify_table))
+                    return TRUE;
+        }
     }
     return FALSE;
 }
